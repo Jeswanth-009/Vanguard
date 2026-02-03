@@ -544,6 +544,6 @@ st.markdown("---")
 st.markdown("""
 <div style='text-align: center; color: #8b8d98;'>
     <p><strong>Vanguard</strong> - Moneyball for Esports</p>
-    <p>Built for Cloud9 Hackathon 2026 | Powered by GRID Esports API & AI</p>
+    <p>Built for Sky Is The Limit Hackathon 2026 | Powered by GRID Esports API & AI</p>
 </div>
 """, unsafe_allow_html=True)
