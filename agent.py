@@ -181,26 +181,26 @@ def _call_openai(prompt: str) -> str:
         LLM-generated scouting report
     """
     try:
-        from langchain_openai import ChatOpenAI
-        from langchain.schema import HumanMessage
+        from openai import OpenAI
         
         api_key = os.getenv("OPENAI_API_KEY")
         if not api_key:
             return "⚠️ ERROR: OPENAI_API_KEY not found in environment variables. Using mock report."
         
-        llm = ChatOpenAI(
+        client = OpenAI(api_key=api_key)
+        
+        response = client.chat.completions.create(
             model="gpt-4-turbo-preview",
-            temperature=0.7,
-            api_key=api_key
+            messages=[
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.7
         )
         
-        messages = [HumanMessage(content=prompt)]
-        response = llm.invoke(messages)
-        
-        return response.content
+        return response.choices[0].message.content
     
     except ImportError:
-        return "⚠️ ERROR: langchain-openai not installed. Run: pip install langchain-openai"
+        return "⚠️ ERROR: openai package not installed. Run: pip install openai"
     except Exception as e:
         return f"⚠️ ERROR calling OpenAI: {str(e)}\n\nUsing mock report instead."
 
