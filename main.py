@@ -86,9 +86,18 @@ with st.sidebar:
         st.info("📡 **GRID Stats Feed API Mode**")
         st.caption("⚠️ Requires GRID Team ID (team name search not available)")
         
+        # Try to get GRID API key from Streamlit secrets first
+        default_grid_key = ""
+        try:
+            default_grid_key = st.secrets.get("GRID_API_KEY", "")
+        except:
+            import os
+            default_grid_key = os.getenv("GRID_API_KEY", "")
+        
         grid_api_key = st.text_input(
             "GRID API Key",
             type="password",
+            value=default_grid_key,
             help="Enter your GRID API key from https://grid.gg/developers"
         )
         
@@ -123,11 +132,20 @@ with st.sidebar:
     
     # API key input (if needed)
     if llm_provider != "Mock (No API)":
+        # Try to get API key from Streamlit secrets first, then environment variables
+        default_api_key = ""
+        if llm_provider == "OpenRouter (Gemma 3 27B - Free)":
+            try:
+                default_api_key = st.secrets.get("OPENROUTER_API_KEY", "")
+            except:
+                import os
+                default_api_key = os.getenv("OPENROUTER_API_KEY", "")
+        
         if llm_provider == "OpenRouter (Gemma 3 27B - Free)":
             api_key = st.text_input(
                 "OpenRouter API Key",
                 type="password",
-                value="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",
+                value=default_api_key,
                 help="OpenRouter API key (Gemma 3 27B is free!)"
             )
         else:
